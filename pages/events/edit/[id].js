@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { parseCookies } from '@/helpers/index'
 import { FaImage } from 'react-icons/fa'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
@@ -13,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const editEventPage = ({ evt }) => {
+const editEventPage = ({ evt, token }) => {
     const [values, setValues] = useState({
         name: evt.name,
         performers: evt.performers,
@@ -45,6 +46,7 @@ const editEventPage = ({ evt }) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(values),
         })
@@ -162,21 +164,21 @@ const editEventPage = ({ evt }) => {
             </div>
 
             <Modal show={showModal} onClose={() => setShowModal(false)}>
-                <ImageUpload evtId={evt.id} imageUploaded={imageUploaded} />
+                <ImageUpload evtId={evt.id} imageUploaded={imageUploaded} token={token} />
             </Modal>
         </Layout>
     )
 }
 
 export async function getServerSideProps({ params: { id }, req }) {
+    const { token } = parseCookies(req)
     const res = await fetch(`${API_URL}/events/${id}`)
     const evt = await res.json()
 
-    console.log(req.headers.cookie)
-
     return {
         props: {
-            evt
+            evt,
+            token
         }
     }
 }
