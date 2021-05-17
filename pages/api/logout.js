@@ -18,6 +18,6 @@ export default async (req, res) => {
     res.status(200).json({ message: 'Success' })
   } else {
     res.setHeader('Allow', ['POST'])
-    res.status(405).json({ message: `Method ${req.method} not allowed` })
+    res.status(405).json({ msg: `Method ${req.method} not allowed` })
   }
 }

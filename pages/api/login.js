@@ -35,10 +35,10 @@ export default async (req, res) => {
     } else {
       res
         .status(data.statusCode)
-        .json({ message: data.message[0].messages[0].message })
+        .json({ msg: data.message[0].messages[0].message })
     }
   } else {
     res.setHeader('Allow', ['POST'])
-    res.status(405).json({ message: `Method ${req.method} not allowed` })
+    res.status(405).json({ msg: `Method ${req.method} not allowed` })
   }
 }
